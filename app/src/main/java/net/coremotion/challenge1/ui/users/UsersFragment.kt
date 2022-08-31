@@ -28,23 +28,24 @@ class UsersFragment : BaseFragment<UsersFragmentBinding>(UsersFragmentBinding::i
         binding.swipeRefresh.setOnRefreshListener {
             usersAdapter.refresh()
         }
+        usersAdapter.userItemOnClick = {
+            openUserDetail(userId = it)
+        }
     }
 
     private fun initUsersRecyclerView() {
         binding.usersRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            usersAdapter = UsersAdapter().apply {
-                userItemOnClick = {
-                    openUserDetail(it)
-                }
-            }
+            usersAdapter = UsersAdapter()
             adapter = usersAdapter
         }
     }
 
     private fun openUserDetail(userId: Int) {
-        UsersFragmentDirections.actionNewsFragmentToUserDetailFragment(
-            userId
+        findNavController().navigate(
+            UsersFragmentDirections.toUserDetailFragment(
+                userId
+            )
         )
     }
 

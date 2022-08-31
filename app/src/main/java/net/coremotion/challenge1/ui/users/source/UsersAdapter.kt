@@ -1,7 +1,6 @@
 package net.coremotion.challenge1.ui.users.source
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -28,27 +27,27 @@ class UsersAdapter() : PagingDataAdapter<Users.Data, UsersAdapter.UserViewHolder
     )
 
     inner class UserViewHolder(private val binding: ItemUserBinding) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        RecyclerView.ViewHolder(binding.root) {
         private var user: Users.Data? = null
         fun onBind() {
             this.user = getItem(bindingAdapterPosition)
             binding.profileImage.setImage(user?.avatar)
             binding.tvEmail.text = user?.email
             binding.tvName.text = user?.firstName.plus(" ").plus(user?.lastName)
-            setListeners()
+            binding.root.setOnClickListener {
+                userItemOnClick?.invoke(user?.id ?: -1)
+            }
         }
 
-        private fun setListeners() {
-            binding.root.setOnClickListener(this)
-        }
+
     }
 }
 
 class DiffCallback : DiffUtil.ItemCallback<Users.Data>() {
     override fun areItemsTheSame(oldItem: Users.Data, newItem: Users.Data) =
-        oldItem.firstName == newItem.avatar
+        oldItem.id == newItem.id
 
 
-    override fun areContentsTheSame(oldItem: Users.Data, newItem: Users.Data) = oldItem != newItem
+    override fun areContentsTheSame(oldItem: Users.Data, newItem: Users.Data) = oldItem == newItem
 
 }

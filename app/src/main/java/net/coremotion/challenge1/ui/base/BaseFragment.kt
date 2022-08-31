@@ -1,18 +1,18 @@
 package net.coremotion.challenge1.ui.base
 
-import android.app.Fragment
+import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 
-typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
+typealias Inflate<T> = (inflater:LayoutInflater,container:ViewGroup?,attach:Boolean) -> T
 
-abstract class BaseFragment<BD : ViewBinding>(private val inflate: Inflate<BD>) : Fragment() {
+abstract class BaseFragment<VB : ViewBinding>(private val inflate: Inflate<VB>) : Fragment() {
 
-    private var _binding: BD? = null
-    protected val binding: BD get() = _binding!!
+    private var _binding: VB? = null
+    protected val binding: VB get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,14 +25,13 @@ abstract class BaseFragment<BD : ViewBinding>(private val inflate: Inflate<BD>) 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        start()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        start()
         _binding = null
     }
 
-    abstract fun start(
-    )
+    abstract fun start()
 }
